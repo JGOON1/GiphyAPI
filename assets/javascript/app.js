@@ -1,34 +1,50 @@
 
 var topics = ["sports", "games"];
 
-$("button-view").on("click", function () {
+$("button").on("click", function () {
 
 
-    var topic = $(this)("data-name");
-    var queryURL = "https://api.giphy.com/v1/gifs/search?q=&api_key=m46gXewIiFo3RsVZ8LNdLkCjla0ViBvTlimit=10&offset=0&rating=G&lang=en&q=" + topic;
+    var topic = $(this).attr("gif-name");
 
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + 
+    topic + "&api_key=UOBPcImBnWkrOWt9xoGo5rDYaopN859Z&limit=10";
+ 
     $.ajax({
         url: queryURL,
         method: "GET"
-    }).then(function (response) {
-        for (var i = 0; i < 10; i++) {
-            var image = $("<img>").attr("src", response.data[i].images.fixed_height_still.url);
-            // attaching data-still and non-animated gif to the element
-            image = image.attr("data-still", response.data[i].images.fixed_height_still.url);
-            // attaching data-animate and an animated gif to the element
-            image = image.attr("data-animate", response.data[i].images.fixed_height_downsampled.url)
-            // adding class "gif" to the element
-            image = image.addClass("gif");
+    })
+    .then(function(response){
+        console.log(queryURL);
+        console.log(response);
+        
+        var results = response.data;
 
-            image = image.attr("data-state", "still");
-            //appending the image and the rating below the images
-            $("#myStuff").append(image).append("<p> Rating: " + response.data[i].rating + "</p>");
+        for ( var i = 0; i < results.length; i++){
+            var gifDiv = $("<div>");
+            var p = $("<p>").text("Rating: " + results[i].rating);
+            var gifImage = $("<img>");
+            gifImage.attr("src", results[i].images.fixed_height.url);
+
+            gifDiv.append(p);
+            gifDiv.append(gifImage);
+
+            $("#gifs-here").prepend(gifDiv);
+
         }
     });
+
 })
-
-
-
+// $("#gifs-here").on("click", ".gif", function () {
+//     var state = $(this).attr("data-state");
+//     // if the data-state is still we will have the src to become an animated gif and vice versa.
+//     if (state === "still") {
+//         $(this).attr("data-state", "animate");
+//         $(this).attr("src", $(this).attr("data-animate"));
+//     } else {
+//         $(this).attr("data-state", "still");
+//         $(this).attr("src", $(this).attr("data-still"));
+//     }
+// });
 
 function renderButtons() {
     $("#buttons-view").empty();
