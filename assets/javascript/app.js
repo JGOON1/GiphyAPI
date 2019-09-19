@@ -1,10 +1,10 @@
 
 var topics = ["sports", "games"];
 
-$("button").on("click", function () {
+$(document).on("click", "button", function () {
 
 
-    var topic = $(this).attr("gif-name");
+    var topic = $(this).attr("data-name");
 
     var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + 
     topic + "&api_key=UOBPcImBnWkrOWt9xoGo5rDYaopN859Z&limit=10";
@@ -23,7 +23,9 @@ $("button").on("click", function () {
             var gifDiv = $("<div>");
             var p = $("<p>").text("Rating: " + results[i].rating);
             var gifImage = $("<img>");
+            gifImage.addClass("gif");
             gifImage.attr("src", results[i].images.fixed_height.url);
+
 
             gifDiv.append(p);
             gifDiv.append(gifImage);
@@ -34,17 +36,17 @@ $("button").on("click", function () {
     });
 
 })
-// $("#gifs-here").on("click", ".gif", function () {
-//     var state = $(this).attr("data-state");
-//     // if the data-state is still we will have the src to become an animated gif and vice versa.
-//     if (state === "still") {
-//         $(this).attr("data-state", "animate");
-//         $(this).attr("src", $(this).attr("data-animate"));
-//     } else {
-//         $(this).attr("data-state", "still");
-//         $(this).attr("src", $(this).attr("data-still"));
-//     }
-// });
+$("#gifs-here").on("click", ".gif", function () {
+    var state = $(this).attr("data-state");
+    // if the data-state is still we will have the src to become an animated gif and vice versa.
+    if (state === "still") {
+        $(this).attr("data-state", "animate");
+        $(this).attr("src", $(this).attr("data-animate"));
+    } else {
+        $(this).attr("data-state", "still");
+        $(this).attr("src", $(this).attr("data-still"));
+    }
+});
 
 function renderButtons() {
     $("#buttons-view").empty();
