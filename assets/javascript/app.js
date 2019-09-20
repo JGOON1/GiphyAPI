@@ -1,6 +1,7 @@
 
 var topics = ["sports", "games"];
 
+
 $(document).on("click", "button", function () {
 
 
@@ -24,29 +25,38 @@ $(document).on("click", "button", function () {
             var p = $("<p>").text("Rating: " + results[i].rating);
             var gifImage = $("<img>");
             gifImage.addClass("gif");
-            gifImage.attr("src", results[i].images.fixed_height.url);
+            gifImage.attr("data-state", "still");
+            gifImage.attr("data-still", results[i].images.fixed_height_still.url);
+            gifImage.attr("data-animate", results[i].images.fixed_height.url)
+            // gifImage.attr("src", results[i].images.fixed_height_still.url);
+            // gifImage.attr("src", results[i].images.fixed_height.url);
 
-
+            
+            var animate = gifImage.attr("src", results[i].images.fixed_height.url);
+            var still = gifImage.attr("src", results[i].images.fixed_height_still.url);
+            
             gifDiv.append(p);
             gifDiv.append(gifImage);
-
+            
             $("#gifs-here").prepend(gifDiv);
-
+            
         }
     });
-
+    $("#gifs-here").on("click", ".gif", function () {
+        var state = $(this).attr("data-state");
+        // if the data-state is still we will have the src to become an animated gif and vice versa.
+        if (state === "still") {
+            $(this).attr("data-state", "animate");
+            $(this).attr("src", $(this).attr("data-animate"));
+        } else {
+            $(this).attr("data-state", "still");
+            $(this).attr("src", $(this).attr("data-still"));
+        }
+    });
+    
 })
-$("#gifs-here").on("click", ".gif", function () {
-    var state = $(this).attr("data-state");
-    // if the data-state is still we will have the src to become an animated gif and vice versa.
-    if (state === "still") {
-        $(this).attr("data-state", "animate");
-        $(this).attr("src", $(this).attr("data-animate"));
-    } else {
-        $(this).attr("data-state", "still");
-        $(this).attr("src", $(this).attr("data-still"));
-    }
-});
+
+
 
 function renderButtons() {
     $("#buttons-view").empty();
